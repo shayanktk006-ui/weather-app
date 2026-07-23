@@ -1,8 +1,14 @@
-* {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -10,13 +16,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   overflow-x: hidden;
   color: #fff;
-  padding: 40px 15px;
+  padding: 40px 16px;
 }
 
+/* Animated gradient background */
 .background {
   position: fixed;
   top: 0; left: 0;
@@ -37,6 +44,7 @@ body {
 .container {
   width: 100%;
   max-width: 480px;
+  margin: 0 auto;
 }
 
 .header {
@@ -63,6 +71,7 @@ body {
   margin-top: 4px;
 }
 
+/* Search box */
 .search-box {
   display: flex;
   gap: 10px;
@@ -139,6 +148,7 @@ body {
   min-height: 20px;
 }
 
+/* Loader */
 .loader {
   display: flex;
   justify-content: center;
@@ -158,6 +168,7 @@ body {
   to { transform: rotate(360deg); }
 }
 
+/* Weather card */
 .weather-card {
   margin-top: 25px;
   background: rgba(255, 255, 255, 0.1);
@@ -243,6 +254,7 @@ body {
   font-weight: 600;
 }
 
+/* Forecast */
 .forecast {
   margin-top: 26px;
 }
@@ -301,6 +313,7 @@ footer span {
   font-weight: 600;
 }
 
+/* Responsive */
 @media (max-width: 480px) {
   .forecast-grid {
     grid-template-columns: repeat(5, 1fr);
