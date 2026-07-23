@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkyCast | Weather App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>Sky<span>Cast</span></h1>
+      <p class="tagline">Live weather for any city, anywhere</p>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="cityInput" placeholder="Enter city name (e.g. Lahore, London, Tokyo)">
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <button id="locationBtn" class="location-btn">📍 Use My Current Location</button>
+
+    <p id="errorMsg" class="error-msg"></p>
+
+    <!-- Loading spinner -->
+    <div id="loader" class="loader hidden">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Main weather card -->
+    <div id="weatherCard" class="weather-card hidden">
+      <div class="location-info">
+        <h2 id="cityName">--</h2>
+        <p id="dateTime">--</p>
+      </div>
+
+      <div class="main-weather">
+        <img id="weatherIcon" src="" alt="weather icon">
+        <div class="temp-block">
+          <h1 id="temperature">--°C</h1>
+          <p id="condition">--</p>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <p class="label">Feels Like</p>
+          <p id="feelsLike" class="value">--°C</p>
+        </div>
+        <div class="detail-item">
+          <p class="label">Humidity</p>
+          <p id="humidity" class="value">--%</p>
+        </div>
+        <div class="detail-item">
+          <p class="label">Wind Speed</p>
+          <p id="windSpeed" class="value">-- km/h</p>
+        </div>
+        <div class="detail-item">
+          <p class="label">Pressure</p>
+          <p id="pressure" class="value">-- hPa</p>
+        </div>
+      </div>
+
+      <div class="forecast">
+        <h3>5-Day Forecast</h3>
+        <div id="forecastContainer" class="forecast-grid"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>Designed & Developed by <span>Muhammad Shayan Khurshid</span> — Bano Qabil Project</p>
+  </footer>
+
+<script src="script.js"></script>
+</body>
+</html>
