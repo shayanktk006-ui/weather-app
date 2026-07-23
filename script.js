@@ -20,32 +20,38 @@ const forecastContainer = document.getElementById("forecastContainer");
 const locationBtn = document.getElementById("locationBtn");
 
 // Weather code to description + icon mapping (Open-Meteo WMO codes)
+// Codes 0, 1, 2 have separate day/night icons since sky appearance changes
 const weatherMap = {
-  0:  { text: "Clear Sky", icon: "☀️" },
-  1:  { text: "Mainly Clear", icon: "🌤️" },
-  2:  { text: "Partly Cloudy", icon: "⛅" },
-  3:  { text: "Overcast", icon: "☁️" },
-  45: { text: "Fog", icon: "🌫️" },
-  48: { text: "Fog", icon: "🌫️" },
-  51: { text: "Light Drizzle", icon: "🌦️" },
-  53: { text: "Drizzle", icon: "🌦️" },
-  55: { text: "Heavy Drizzle", icon: "🌧️" },
-  61: { text: "Light Rain", icon: "🌦️" },
-  63: { text: "Rain", icon: "🌧️" },
-  65: { text: "Heavy Rain", icon: "🌧️" },
-  71: { text: "Light Snow", icon: "🌨️" },
-  73: { text: "Snow", icon: "❄️" },
-  75: { text: "Heavy Snow", icon: "❄️" },
-  80: { text: "Rain Showers", icon: "🌦️" },
-  81: { text: "Rain Showers", icon: "🌧️" },
-  82: { text: "Violent Showers", icon: "⛈️" },
-  95: { text: "Thunderstorm", icon: "⛈️" },
-  96: { text: "Thunderstorm w/ Hail", icon: "⛈️" },
-  99: { text: "Severe Thunderstorm", icon: "⛈️" }
+  0:  { text: "Clear Sky",      dayIcon: "☀️",  nightIcon: "🌙" },
+  1:  { text: "Mainly Clear",   dayIcon: "🌤️", nightIcon: "🌙" },
+  2:  { text: "Partly Cloudy",  dayIcon: "⛅",  nightIcon: "☁️🌙" },
+  3:  { text: "Overcast",       dayIcon: "☁️",  nightIcon: "☁️" },
+  45: { text: "Fog",            dayIcon: "🌫️", nightIcon: "🌫️" },
+  48: { text: "Fog",            dayIcon: "🌫️", nightIcon: "🌫️" },
+  51: { text: "Light Drizzle",  dayIcon: "🌦️", nightIcon: "🌧️" },
+  53: { text: "Drizzle",        dayIcon: "🌦️", nightIcon: "🌧️" },
+  55: { text: "Heavy Drizzle",  dayIcon: "🌧️", nightIcon: "🌧️" },
+  61: { text: "Light Rain",     dayIcon: "🌦️", nightIcon: "🌧️" },
+  63: { text: "Rain",           dayIcon: "🌧️", nightIcon: "🌧️" },
+  65: { text: "Heavy Rain",     dayIcon: "🌧️", nightIcon: "🌧️" },
+  71: { text: "Light Snow",     dayIcon: "🌨️", nightIcon: "🌨️" },
+  73: { text: "Snow",           dayIcon: "❄️",  nightIcon: "❄️" },
+  75: { text: "Heavy Snow",     dayIcon: "❄️",  nightIcon: "❄️" },
+  80: { text: "Rain Showers",   dayIcon: "🌦️", nightIcon: "🌧️" },
+  81: { text: "Rain Showers",   dayIcon: "🌧️", nightIcon: "🌧️" },
+  82: { text: "Violent Showers",dayIcon: "⛈️",  nightIcon: "⛈️" },
+  95: { text: "Thunderstorm",   dayIcon: "⛈️",  nightIcon: "⛈️" },
+  96: { text: "Thunderstorm w/ Hail", dayIcon: "⛈️", nightIcon: "⛈️" },
+  99: { text: "Severe Thunderstorm",  dayIcon: "⛈️", nightIcon: "⛈️" }
 };
 
-function getWeatherInfo(code) {
-  return weatherMap[code] || { text: "Unknown", icon: "🌡️" };
+// isDay: 1 = daytime, 0 = nighttime (defaults to day if not provided, e.g. for forecast days)
+function getWeatherInfo(code, isDay = 1) {
+  const entry = weatherMap[code] || { text: "Unknown", dayIcon: "🌡️", nightIcon: "🌡️" };
+  return {
+    text: entry.text,
+    icon: isDay ? entry.dayIcon : entry.nightIcon
+  };
 }
 
 function iconToEmojiImage(emoji) {
@@ -64,7 +70,7 @@ async function getCoordinates(city) {
 }
 
 async function getWeather(lat, lon) {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,surface_pressure&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,surface_pressure,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`;
   const res = await fetch(url);
   if (!res.ok) throw new Error("Could not fetch weather data. Try again later.");
   return await res.json();
@@ -100,7 +106,7 @@ async function getPlaceName(lat, lon) {
 // Renders weather data onto the page (shared by city-search and geolocation)
 function renderWeather(placeName, weatherData) {
   const current = weatherData.current;
-  const info = getWeatherInfo(current.weather_code);
+  const info = getWeatherInfo(current.weather_code, current.is_day);
 
   cityName.textContent = placeName;
   dateTime.textContent = formatDate(new Date());
@@ -212,6 +218,6 @@ cityInput.addEventListener("keypress", (e) => {
 
 // Load a default city on first visit
 window.addEventListener("DOMContentLoaded", () => {
-  cityInput.value = "islamabad";
+  cityInput.value = "Lahore";
   searchWeather();
 });
