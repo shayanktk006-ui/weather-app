@@ -218,6 +218,6 @@ cityInput.addEventListener("keypress", (e) => {
 
 // Load a default city on first visit
 window.addEventListener("DOMContentLoaded", () => {
-  cityInput.value = "Lahore";
+  cityInput.value = "Islamabad";
   searchWeather();
 });
