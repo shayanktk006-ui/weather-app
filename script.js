@@ -120,11 +120,11 @@ async function getPlaceName(lat, lon) {
 }
 
 // Renders weather data onto the page (shared by city-search and geolocation)
-function renderWeather(placeName, weatherData) {
+function renderWeather(placeName, weatherData, isCurrentLocation = false) {
   const current = weatherData.current;
   const info = getWeatherInfo(current.weather_code, current.is_day);
 
-  cityName.textContent = `📍 ${placeName}`;
+  cityName.textContent = isCurrentLocation ? `📍 ${placeName}` : placeName;
   dateTime.textContent = formatDate(new Date());
 
   weatherIcon.src = iconToEmojiImage(info.icon);
