@@ -124,7 +124,7 @@ function renderWeather(placeName, weatherData, isCurrentLocation = false) {
   const current = weatherData.current;
   const info = getWeatherInfo(current.weather_code, current.is_day);
 
-  cityName.textContent = isCurrentLocation ? `📍 ${placeName}` : placeName;
+  cityName.textContent = isCurrentLocation ? `${placeName}` : placeName;
   dateTime.textContent = formatDate(new Date());
 
   weatherIcon.src = iconToEmojiImage(info.icon);
