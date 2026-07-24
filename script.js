@@ -88,8 +88,9 @@ function getDayName(dateStr) {
 
 // Reverse geocode: turn lat/lon into a readable place name (free, no API key)
 async function getPlaceName(lat, lon) {
-  const url = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&format=json`;
+  // Try Open-Meteo's reverse geocoding first
   try {
+    const url = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&format=json`;
     const res = await fetch(url);
     const data = await res.json();
     if (data.results && data.results.length > 0) {
@@ -98,8 +99,23 @@ async function getPlaceName(lat, lon) {
       return `${r.name}${region}, ${r.country}`;
     }
   } catch (e) {
+    // fall through to backup service
+  }
+
+  // Backup: BigDataCloud's free client-side reverse geocoding (no API key needed)
+  try {
+    const backupUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`;
+    const res = await fetch(backupUrl);
+    const data = await res.json();
+    const place = data.city || data.locality || data.principalSubdivision;
+    if (place) {
+      const region = data.principalSubdivision && data.principalSubdivision !== place ? `, ${data.principalSubdivision}` : "";
+      return `${place}${region}, ${data.countryName}`;
+    }
+  } catch (e) {
     // ignore, fallback below
   }
+
   return "Your Current Location";
 }
 
@@ -108,7 +124,7 @@ function renderWeather(placeName, weatherData) {
   const current = weatherData.current;
   const info = getWeatherInfo(current.weather_code, current.is_day);
 
-  cityName.textContent = placeName;
+  cityName.textContent = `📍 ${placeName}`;
   dateTime.textContent = formatDate(new Date());
 
   weatherIcon.src = iconToEmojiImage(info.icon);
