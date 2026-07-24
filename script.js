@@ -200,7 +200,7 @@ function useMyLocation() {
           getWeather(latitude, longitude)
         ]);
         cityInput.value = "";
-        renderWeather(placeName, weatherData);
+        renderWeather(placeName, weatherData, true);
       } catch (err) {
         errorMsg.textContent = err.message || "Could not fetch weather for your location.";
       } finally {
